@@ -24,7 +24,20 @@ const initialColors = {
   }))],
 };
 
-const initialState = {
+// Load state from local storage
+const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem('projects');
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+};
+
+const initialState = loadState() || {
   currentProjectName: 'Project1',
   projects: [
     {
@@ -37,6 +50,15 @@ const initialState = {
   ],
 };
 
+const saveState = (state) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('projects', serializedState);
+  } catch (err) {
+    // Ignore write errors
+  }
+};
+
 const projectSlice = createSlice({
   name: 'projects',
   initialState,
@@ -45,6 +67,7 @@ const projectSlice = createSlice({
       const index = state.projects.findIndex(p => p.name === action.payload.name);
       if (index !== -1) {
         state.projects[index] = action.payload;
+        saveState(state);
       }
     },
     addProject: (state, action) => {
@@ -53,12 +76,14 @@ const projectSlice = createSlice({
         colors: initialColors,
       });
       state.currentProjectName = action.payload.name;
+      saveState(state);
     },
     updateColors: (state, action) => {
       const { projectName, colors } = action.payload;
       const project = state.projects.find(p => p.name === projectName);
       if (project) {
         project.colors = colors;
+        saveState(state);
       }
     },
     setCurrentProject: (state, action) => {

@@ -30,7 +30,11 @@ const Dashboard = () => {
             <span className="text-gray-400 text-lg">+ Create application</span>
           </div>
           {projects.map((project, index) => (
-            <div key={index} className="border rounded-lg p-4 bg-white">
+            <div
+              key={index}
+              className="border rounded-lg p-4 bg-white cursor-pointer"
+              onClick={() => navigate(`/project/${project.name}`)}
+            >
               <h3 className="font-semibold">{project.name}</h3>
               <p className="text-sm text-gray-500">{project.plan}</p>
               <p className="text-sm text-red-500 mt-2">{project.env}</p>
