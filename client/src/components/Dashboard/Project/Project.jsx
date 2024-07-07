@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateProject, setCurrentProject } from '../../../store/projectSlice';
 import Colors from './Color/Colors';
 import Radius from './Radius';
-import Spacing from './Spacing';
 import Components from './Components/Components';
 import ProjectNavbar from './ProjectNavbar';
 
@@ -42,8 +41,6 @@ const Project = () => {
     switch (selectedTab) {
       case 'Color':
         return <Colors colors={editedProject.colors} onChange={handleInputChange} />;
-      case 'Spacing':
-        return <Spacing spacing={editedProject.spacing} onChange={handleInputChange} />;
       case 'Radius':
         return <Radius radius={editedProject.radius} onChange={handleInputChange} />;
       case 'Components':

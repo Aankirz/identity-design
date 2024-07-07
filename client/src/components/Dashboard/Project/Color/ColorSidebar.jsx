@@ -1,6 +1,6 @@
 import React from 'react';
 
-const categories = ['Primary', 'Secondary', 'Neutrals', 'Success', 'Warning', 'Error'];
+const categories = ['Primary', 'Secondary'];
 
 const ColorSidebar = ({ selectedCategory, onSelectCategory }) => {
   return (
