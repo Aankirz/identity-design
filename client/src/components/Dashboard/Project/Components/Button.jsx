@@ -32,25 +32,32 @@ const Button = ({ variant, size, colorKey }) => {
   };
 
   const getSizeClass = (size) => {
-    const paddingX = customStyles.paddingX || (size === 'sm' ? '2' : size === 'md' ? '4' : '6');
-    const paddingY = customStyles.paddingY || (size === 'sm' ? '1' : size === 'md' ? '2' : '3');
+    const paddingX = customStyles.paddingX || (size === 'sm' ? '8px' : size === 'md' ? '16px' : '24px');
+    const paddingY = customStyles.paddingY || (size === 'sm' ? '4px' : size === 'md' ? '8px' : '12px');
     const borderRadius = customStyles.borderRadius || '4px';
+    const textColor = customStyles.textColor || '#ffffff';
 
-    return `py-${paddingY} px-${paddingX} rounded-${borderRadius}`;
+    return {
+      padding: `${paddingY} ${paddingX}`,
+      borderRadius: borderRadius,
+      color: textColor,
+    };
   };
 
   return (
     <div>
-      {colors.map((color, index) => (
-        <button
-          key={index}
-          className={`rounded ${getSizeClass(size)} text-white`}
-          style={{ backgroundColor: color.value, color: customStyles.textColor || 'white' }}
-          onClick={() => handleButtonClick(index)}
-        >
-          Continue
-        </button>
-      ))}
+      <div className="flex flex-wrap gap-4">
+        {colors.map((color, index) => (
+          <button
+            key={index}
+            className="rounded text-white"
+            style={{ backgroundColor: color.value, ...getSizeClass(size) }}
+            onClick={() => handleButtonClick(index)}
+          >
+            Continue
+          </button>
+        ))}
+      </div>
 
       {showCustomization && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -64,7 +71,7 @@ const Button = ({ variant, size, colorKey }) => {
             <h2 className="text-2xl mb-4">Customize Button</h2>
             <form>
               <label className="block mb-2">
-                Padding X (in rem):
+                Padding X (px):
                 <input
                   type="text"
                   name="paddingX"
@@ -74,7 +81,7 @@ const Button = ({ variant, size, colorKey }) => {
                 />
               </label>
               <label className="block mb-2">
-                Padding Y (in rem):
+                Padding Y (px):
                 <input
                   type="text"
                   name="paddingY"
@@ -84,7 +91,7 @@ const Button = ({ variant, size, colorKey }) => {
                 />
               </label>
               <label className="block mb-2">
-                Border Radius (in px):
+                Border Radius (px):
                 <input
                   type="text"
                   name="borderRadius"
@@ -94,7 +101,7 @@ const Button = ({ variant, size, colorKey }) => {
                 />
               </label>
               <label className="block mb-2">
-                Text Color:
+                Text Color (hex):
                 <input
                   type="text"
                   name="textColor"
