@@ -24,7 +24,6 @@ const initialColors = {
   }))],
 };
 
-// Load state from local storage
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem('projects');
@@ -55,7 +54,7 @@ const saveState = (state) => {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('projects', serializedState);
   } catch (err) {
-    // Ignore write errors
+    throw new Error(err);
   }
 };
 

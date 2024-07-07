@@ -6,6 +6,8 @@ import Dashboard from './components/Dashboard/Dashboard';
 import Project from './components/Dashboard/Project/Project';
 import Navbar from './components/Shared/Navbar';
 import Footer from './components/Shared/Footer';
+import LandingPage from './components/LandingPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -13,10 +15,11 @@ function App() {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/project/:projectName/" element={<Project />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/project/:projectName" element={<ProtectedRoute><Project /></ProtectedRoute>} />
         </Routes>
         <Footer />
       </div>
