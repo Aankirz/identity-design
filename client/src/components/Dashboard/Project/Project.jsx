@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateProject } from '../../store/projectSlice';
-import Colors from './Project/Color/Colors';
-import Radius from './Project/Radius';
-import Spacing from './Project/Spacing';
-import Components from './Project/Components';
-import ProjectNavbar from './Project/ProjectNavbar';
+import { updateProject, setCurrentProject } from '../../../store/projectSlice';
+import Colors from './Color/Colors';
+import Radius from './Radius';
+import Spacing from './Spacing';
+import Components from './Components/Components';
+import ProjectNavbar from './ProjectNavbar';
 
 const Project = () => {
   const { projectName } = useParams();
@@ -16,15 +16,21 @@ const Project = () => {
   const [editedProject, setEditedProject] = useState(project);
   const [selectedTab, setSelectedTab] = useState('Color');
 
+  useEffect(() => {
+    if (project) {
+      dispatch(setCurrentProject(projectName));
+      setEditedProject(project);
+    }
+  }, [project, projectName, dispatch]);
+
   if (!project) {
     return <div className="flex items-center justify-center min-h-screen">Project not found</div>;
   }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (field, value) => {
     setEditedProject({
       ...editedProject,
-      [name]: value
+      [field]: value
     });
   };
 
@@ -41,7 +47,7 @@ const Project = () => {
       case 'Radius':
         return <Radius radius={editedProject.radius} onChange={handleInputChange} />;
       case 'Components':
-        return <Components components={editedProject.components} onChange={handleInputChange} />;
+        return <Components colors={editedProject.colors} components={editedProject.components} onChange={handleInputChange} />;
       default:
         return null;
     }

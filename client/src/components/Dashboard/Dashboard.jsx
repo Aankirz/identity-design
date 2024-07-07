@@ -14,7 +14,6 @@ const Dashboard = () => {
     e.preventDefault();
     const newProject = { name: projectName, plan: 'Free Plan', env: 'No Production Environment', updated: 'just now' };
     dispatch(addProject(newProject));
-    // Redirect to the new project page
     navigate(`/project/${projectName}`);
     setShowModal(false);
     setProjectName('');

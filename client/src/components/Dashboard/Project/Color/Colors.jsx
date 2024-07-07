@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateColors } from '../../../../store/projectSlice';
 import ColorSidebar from './ColorSidebar';
 import ColorContent from './ColorContent';
 import tinycolor from 'tinycolor2';
+import { useParams } from 'react-router-dom';
 
 const generateGradientColors = (baseColor, count) => {
   const color = tinycolor(baseColor);
@@ -15,30 +18,38 @@ const generateGradientColors = (baseColor, count) => {
   return [...lightColors.reverse(), ...darkColors];
 };
 
-const initialColors = {
-  Primary: [{ label: 'Primary', value: '#009FF5' }, ...generateGradientColors('#009FF5', 10).map((shade, i) => ({
-    label: `Primary${i + 1}`,
-    value: shade,
-  }))],
-  Secondary: [{ label: 'Secondary', value: '#AAB9C5' }, ...generateGradientColors('#AAB9C5', 10).map((shade, i) => ({
-    label: `Secondary${i + 1}`,
-    value: shade,
-  }))],
-  Neutrals: [],
-  Success: [],
-  Warning: [],
-  Error: [],
-};
-
 const Colors = ({ onChange }) => {
+  const dispatch = useDispatch();
+  const { projectName } = useParams();
+  const projects = useSelector((state) => state.projects.projects);
+  const project = projects.find(p => p.name === projectName);
+  const initialColors = project ? project.colors : {};
+
   const [selectedCategory, setSelectedCategory] = useState('Primary');
   const [colors, setColors] = useState(initialColors);
 
+  useEffect(() => {
+    setColors(initialColors);
+  }, [initialColors]);
+
   const handleColorChange = (category, index, field, value) => {
-    const updatedColors = { ...colors };
-    updatedColors[category][index][field] = value;
+    const updatedColors = { 
+      ...colors, 
+      [category]: colors[category].map((color, i) => 
+        i === index ? { ...color, [field]: value } : color
+      )
+    };
+
+    if (field === 'value' && index === 0) {
+      const gradientColors = generateGradientColors(value, 10);
+      updatedColors[category] = updatedColors[category].map((color, i) => 
+        i > 0 ? { ...color, value: gradientColors[i - 1] } : color
+      );
+    }
+
     setColors(updatedColors);
-    onChange(updatedColors);
+    dispatch(updateColors({ projectName, colors: updatedColors }));
+    onChange('colors', updatedColors); // Update the parent component state
   };
 
   return (

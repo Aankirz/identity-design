@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Dashboard from './components/Dashboard/Dashboard';
-import Project from './components/Dashboard/Project';
+import Project from './components/Dashboard/Project/Project';
 import Navbar from './components/Shared/Navbar';
 import Footer from './components/Shared/Footer';
 
@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/project/:projectName" element={<Project />} />
+          <Route path="/project/:projectName/" element={<Project />} />
         </Routes>
         <Footer />
       </div>
