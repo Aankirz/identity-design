@@ -2,7 +2,9 @@
 
 Welcome to **Identity Design Systems**! This project allows you to build quick, scalable design systems with zero grunt work. Create and manage your design components effortlessly. 🌟
 
-![Project Preview](path_to_your_screenshot.png)
+
+<img width="169" alt="Screenshot 2024-07-08 at 11 08 18" src="https://github.com/Aankirz/identity-design/assets/95562947/2226d808-af8e-46d7-b793-0576dd4ed306">
+
 
 ## ✨ Features
 
@@ -31,7 +33,7 @@ Welcome to **Identity Design Systems**! This project allows you to build quick, 
 
 ## 🚀 Demo
 
-[![Watch the Demo](path_to_your_video_thumbnail.png)](https://link_to_your_demo_video)
+[![Watch the Demo]](https://youtu.be/XdUuFXW3IfM)
 
 ## 📦 Deployment
 
