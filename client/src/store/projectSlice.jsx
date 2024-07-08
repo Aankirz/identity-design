@@ -46,7 +46,7 @@ const initialState = {
 };
 
 export const saveProject = createAsyncThunk('projects/saveProject', async (project) => {
-  const response = await axios.post('http://localhost:3000/api/projects/save', project); // Ensure correct URL
+  const response = await axios.post('https://identity-design.onrender.com/api/projects/save', project); // Ensure correct URL
   return response.data;
 });
 
