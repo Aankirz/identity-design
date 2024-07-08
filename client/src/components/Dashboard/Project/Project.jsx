@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateProject, setCurrentProject } from '../../../store/projectSlice';
+import { updateProject, setCurrentProject, saveProject, updateColors } from '../../../store/projectSlice';
 import Colors from './Color/Colors';
-import Radius from './Radius';
 import Components from './Components/Components';
 import ProjectNavbar from './ProjectNavbar';
+import axios from 'axios';
 
 const Project = () => {
   const { projectName } = useParams();
@@ -33,16 +33,20 @@ const Project = () => {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     dispatch(updateProject(editedProject));
+    try {
+      await dispatch(saveProject(editedProject)).unwrap();
+      console.log('Project saved successfully');
+    } catch (error) {
+      console.error('Error saving project:', error);
+    }
   };
 
   const renderTabContent = () => {
     switch (selectedTab) {
       case 'Color':
-        return <Colors colors={editedProject.colors} onChange={handleInputChange} />;
-      case 'Radius':
-        return <Radius radius={editedProject.radius} onChange={handleInputChange} />;
+        return <Colors colors={editedProject.colors} onChange={(colors) => handleInputChange('colors', colors)} />;
       case 'Components':
         return <Components colors={editedProject.colors} components={editedProject.components} onChange={handleInputChange} />;
       default:

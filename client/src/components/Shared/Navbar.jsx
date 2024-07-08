@@ -11,12 +11,22 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-800 p-4">
+    <nav className="bg-white shadow-md py-4">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-white text-xl font-bold">Identity</Link>
-        <div className="flex space-x-4">
-          <Link to="/dashboard" className="text-gray-300 hover:text-white">Dashboard</Link>
-          <button onClick={handleLogout} className="text-gray-300 hover:text-white">Logout</button>
+        <Link to="/" className="text-2xl font-bold text-blue-600">Identity</Link>
+        <div className="flex space-x-6">
+          <Link
+            to="/dashboard"
+            className="text-gray-700 hover:text-blue-600 transition-colors duration-300"
+          >
+            Dashboard
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="text-gray-700 hover:text-red-600 transition-colors duration-300"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </nav>

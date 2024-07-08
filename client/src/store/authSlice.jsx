@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../services/authService';
 
 const initialState = {
-  user: null,
-  isAuthenticated: false,
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  isAuthenticated: !!localStorage.getItem('user'),
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -23,7 +23,25 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (userDat
 export const loginUser = createAsyncThunk('auth/loginUser', async (userData, thunkAPI) => {
   try {
     const response = await authService.login(userData.email, userData.password);
+    localStorage.setItem('user', JSON.stringify(response.data));
+    authService.setAuthToken(response.data.token);
     return response.data;
+  } catch (error) {
+    const message = error.response.data.message || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const loadUser = createAsyncThunk('auth/loadUser', async (_, thunkAPI) => {
+  try {
+    const token = localStorage.getItem('user')?.token;
+    if (token) {
+      authService.setAuthToken(token);
+      const response = await authService.loadUser();
+      return response.data;
+    } else {
+      return thunkAPI.rejectWithValue('No token found');
+    }
   } catch (error) {
     const message = error.response.data.message || error.message || error.toString();
     return thunkAPI.rejectWithValue(message);
@@ -33,7 +51,8 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (userData, thu
 export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, thunkAPI) => {
   try {
     await authService.logout();
-    return;
+    localStorage.removeItem('user');
+    authService.setAuthToken();
   } catch (error) {
     const message = error.response.data.message || error.message || error.toString();
     return thunkAPI.rejectWithValue(message);
@@ -77,6 +96,20 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(loadUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loadUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(loadUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

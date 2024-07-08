@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 import tinycolor from 'tinycolor2';
 
 const generateGradientColors = (baseColor, count) => {
@@ -28,33 +29,33 @@ const loadState = () => {
   try {
     const serializedState = localStorage.getItem('projects');
     if (serializedState === null) {
-      return undefined;
+      return [];
     }
-    return JSON.parse(serializedState);
+    const state = JSON.parse(serializedState);
+    return Array.isArray(state) ? state : [];
   } catch (err) {
-    return undefined;
+    return [];
   }
 };
 
-const initialState = loadState() || {
+const initialState = {
+  projects: loadState(),
   currentProjectName: 'Project1',
-  projects: [
-    {
-      name: 'Project1',
-      colors: initialColors,
-      plan: 'Free Plan',
-      env: 'No Production Environment',
-      updated: 'just now'
-    },
-  ],
+  error: null,
+  loading: false,
 };
+
+export const saveProject = createAsyncThunk('projects/saveProject', async (project) => {
+  const response = await axios.post('http://localhost:3000/api/projects/save', project); // Ensure correct URL
+  return response.data;
+});
 
 const saveState = (state) => {
   try {
-    const serializedState = JSON.stringify(state);
+    const serializedState = JSON.stringify(state.projects);
     localStorage.setItem('projects', serializedState);
   } catch (err) {
-    throw new Error(err);
+    console.error("Could not save state", err);
   }
 };
 
@@ -62,6 +63,9 @@ const projectSlice = createSlice({
   name: 'projects',
   initialState,
   reducers: {
+    setCurrentProject: (state, action) => {
+      state.currentProjectName = action.payload;
+    },
     updateProject: (state, action) => {
       const index = state.projects.findIndex(p => p.name === action.payload.name);
       if (index !== -1) {
@@ -85,11 +89,28 @@ const projectSlice = createSlice({
         saveState(state);
       }
     },
-    setCurrentProject: (state, action) => {
-      state.currentProjectName = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(saveProject.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveProject.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.projects.findIndex(p => p.name === action.payload.name);
+        if (index !== -1) {
+          state.projects[index] = action.payload;
+        } else {
+          state.projects.push(action.payload);
+        }
+        saveState(state);
+      })
+      .addCase(saveProject.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 
-export const { updateProject, addProject, updateColors, setCurrentProject } = projectSlice.actions;
+export const { setCurrentProject, updateProject, addProject, updateColors } = projectSlice.actions;
 export default projectSlice.reducer;

@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProject } from '../../store/projectSlice';
+import { addProject, saveProject } from '../../store/projectSlice';
 
 const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [projectName, setProjectName] = useState('');
-  const projects = useSelector((state) => state.projects.projects);
+  const { projects, loading, error } = useSelector((state) => state.projects);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!Array.isArray(projects)) {
+      console.error("Projects should be an array");
+    }
+  }, [projects]);
 
   const handleCreateProject = (e) => {
     e.preventDefault();
     const newProject = { name: projectName, plan: 'Free Plan', env: 'No Production Environment', updated: 'just now' };
     dispatch(addProject(newProject));
+    dispatch(saveProject(newProject));
     navigate(`/project/${projectName}`);
     setShowModal(false);
     setProjectName('');
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="relative min-h-screen bg-gray-100">
@@ -29,7 +44,7 @@ const Dashboard = () => {
           >
             <span className="text-gray-400 text-lg">+ Create application</span>
           </div>
-          {projects.map((project, index) => (
+          {Array.isArray(projects) && projects.map((project, index) => (
             <div
               key={index}
               className="border rounded-lg p-4 bg-white cursor-pointer"

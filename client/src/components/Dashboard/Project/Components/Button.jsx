@@ -32,14 +32,14 @@ const Button = ({ variant, size, colorKey }) => {
   };
 
   const getSizeClass = (size) => {
-    const paddingX = customStyles.paddingX || (size === 'sm' ? '8px' : size === 'md' ? '16px' : '24px');
-    const paddingY = customStyles.paddingY || (size === 'sm' ? '4px' : size === 'md' ? '8px' : '12px');
-    const borderRadius = customStyles.borderRadius || '4px';
+    const paddingX = customStyles.paddingX || (size === 'sm' ? '8' : size === 'md' ? '16' : '24');
+    const paddingY = customStyles.paddingY || (size === 'sm' ? '4' : size === 'md' ? '8' : '12');
+    const borderRadius = customStyles.borderRadius || '4';
     const textColor = customStyles.textColor || '#ffffff';
 
     return {
-      padding: `${paddingY} ${paddingX}`,
-      borderRadius: borderRadius,
+      padding: `${paddingY}px ${paddingX}px`,
+      borderRadius: `${borderRadius}px`,
       color: textColor,
     };
   };
@@ -50,7 +50,7 @@ const Button = ({ variant, size, colorKey }) => {
         {colors.map((color, index) => (
           <button
             key={index}
-            className="rounded text-white"
+            className="rounded"
             style={{ backgroundColor: color.value, ...getSizeClass(size) }}
             onClick={() => handleButtonClick(index)}
           >
@@ -73,7 +73,7 @@ const Button = ({ variant, size, colorKey }) => {
               <label className="block mb-2">
                 Padding X (px):
                 <input
-                  type="text"
+                  type="number"
                   name="paddingX"
                   value={customStyles.paddingX}
                   onChange={handleInputChange}
@@ -83,7 +83,7 @@ const Button = ({ variant, size, colorKey }) => {
               <label className="block mb-2">
                 Padding Y (px):
                 <input
-                  type="text"
+                  type="number"
                   name="paddingY"
                   value={customStyles.paddingY}
                   onChange={handleInputChange}
@@ -93,7 +93,7 @@ const Button = ({ variant, size, colorKey }) => {
               <label className="block mb-2">
                 Border Radius (px):
                 <input
-                  type="text"
+                  type="number"
                   name="borderRadius"
                   value={customStyles.borderRadius}
                   onChange={handleInputChange}

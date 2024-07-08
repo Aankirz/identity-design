@@ -2,8 +2,6 @@ import React from 'react';
 
 const tabs = [
   { name: 'Color', href: '#', current: true },
-  { name: 'Spacing', href: '#', current: false },
-  { name: 'Radius', href: '#', current: false },
   { name: 'Components', href: '#', current: false },
 ];
 
