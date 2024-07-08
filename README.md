@@ -1,7 +1,7 @@
 # 🎨 Identity Design Systems
 
 Welcome to **Identity Design Systems**! This project allows you to build quick, scalable design systems with zero grunt work. Create and manage your design components effortlessly. 🌟
-
+<hr/>
 
 <img width="169" alt="Screenshot 2024-07-08 at 11 08 18" src="https://github.com/Aankirz/identity-design/assets/95562947/2226d808-af8e-46d7-b793-0576dd4ed306">
 
@@ -48,7 +48,3 @@ We welcome contributions! Please read our [CONTRIBUTING.md](link_to_contributing
 ## 📄 License
 
 This project is licensed under the GNU GENERAL PUBLIC LICENSE License - see the [LICENSE.md](link_to_license.md) file for details.
-
----
-
-Feel free to replace placeholders like `path_to_your_screenshot.png`, `path_to_your_video_thumbnail.png`, `link_to_contributing.md`, `link_to_license.md`, and `email@example.com` with the actual content.
